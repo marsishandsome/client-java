@@ -62,6 +62,7 @@ public class TiSession implements AutoCloseable {
   private volatile RegionManager regionManager;
   private volatile RegionStoreClient.RegionStoreClientBuilder clientBuilder;
   private boolean isClosed = false;
+  private TiTimestamp ts = null;
 
   public TiSession(TiConfiguration conf) {
     this.conf = conf;
@@ -125,7 +126,19 @@ public class TiSession implements AutoCloseable {
     return conf;
   }
 
+  public void setTimestamp(TiTimestamp ts) {
+    this.ts = ts;
+  }
+
   public TiTimestamp getTimestamp() {
+    if (ts == null) {
+      return getPDClient().getTimestamp(ConcreteBackOffer.newTsoBackOff());
+    } else {
+      return ts;
+    }
+  }
+
+  public TiTimestamp getTimestampFromPD() {
     return getPDClient().getTimestamp(ConcreteBackOffer.newTsoBackOff());
   }
 

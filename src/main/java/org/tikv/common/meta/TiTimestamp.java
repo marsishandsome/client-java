@@ -21,6 +21,8 @@ import java.util.Objects;
 /** TiTimestamp is the timestamp returned by timestamp oracle inside placement driver */
 public class TiTimestamp implements Serializable {
   private static final int PHYSICAL_SHIFT_BITS = 18;
+  private static final long LOGICAL_MASK = 0x2ffffL;
+  private static final long PHYSICAL_MASK = 0xfffffffffffd0000L;
 
   private final long physical;
   private final long logical;
@@ -28,6 +30,11 @@ public class TiTimestamp implements Serializable {
   public TiTimestamp(long p, long l) {
     this.physical = p;
     this.logical = l;
+  }
+
+  public TiTimestamp(long version) {
+    this.logical = version & LOGICAL_MASK;
+    this.physical = (version & PHYSICAL_MASK) >> PHYSICAL_SHIFT_BITS;
   }
 
   public static long extractPhysical(long ts) {
