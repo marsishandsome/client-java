@@ -753,6 +753,7 @@ public class RegionStoreClient extends AbstractRegionStoreClient {
             SplitRegionRequest.newBuilder()
                 .setContext(region.getReplicaContext(storeType))
                 .addAllSplitKeys(splitKeys)
+                .setIsRawKv(conf.isRawKVMode())
                 .build();
 
     KVErrorHandler<SplitRegionResponse> handler =

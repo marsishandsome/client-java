@@ -70,6 +70,7 @@ public abstract class AbstractRegionStoreClient
     }
   }
 
+  @Override
   public TiRegion getRegion() {
     return region;
   }
